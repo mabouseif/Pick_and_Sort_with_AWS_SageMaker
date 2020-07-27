@@ -1,0 +1,53 @@
+<launch>
+
+    <!-- UR Group-->
+    <group name="ur">
+        <!-- UR5 Gazebo -->
+        <include file="$(find ur_gazebo)/launch/ur5.launch">
+          <arg name="limited" value="true"/>
+        </include>
+
+        <!-- UR5 MoveIt! config for motion planning -->
+        <include file="$(find ur5_moveit_config)/launch/ur5_moveit_planning_execution.launch">
+          <arg name="limited" value="true"/>
+          <arg name="sim" value="true"/>
+        </include>
+
+        <!-- UR5 MoveIt! RVIZ-->
+        <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch">
+          <arg name="config" value="true"/>
+        </include>
+    </group>
+
+
+
+
+    <group name="objects">  
+
+      <node name="table_node" pkg="gazebo_ros" type="spawn_model" 
+      args="-urdf -file $(find pick_and_sort)/urdf/table.urdf -model 
+      table  -x -0.50 -y 0.05 -z 1" 
+      respawn="false" output="screen" />
+
+      <!-- <node name="blue_cylinder_node" pkg="gazebo_ros" type="spawn_model" 
+      args="-urdf -file $(find pick_and_sort)/urdf/blue_cylinder.urdf -model 
+      blue_cylinder  -x -0.50 -y 0.6 -z 1" 
+      respawn="false" output="screen" /> -->
+
+      <node name="red_box_node" pkg="gazebo_ros" type="spawn_model" 
+      args="-urdf -file $(find pick_and_sort)/urdf/red_box.urdf -model 
+      red_box  -x -0.50 -y 0.05 -z 1.3" 
+      respawn="false" output="screen" />
+      
+    </group> 
+
+
+
+    <!-- <include>
+      <uri>model://carboard_box</uri>
+    </include> -->
+
+
+
+
+</launch>
