@@ -140,7 +140,7 @@ include_directories(
 # With catkin_make all packages are built within a single CMake context
 # The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/pick_and_sort_node.cpp)
-add_executable(first_test src/first_test.cpp)
+add_executable(first_test src/first_test.cpp src/robot.h src/robot.cpp)
 target_link_libraries(first_test ${catkin_LIBRARIES})
 
 ## Rename C++ executable without prefix
