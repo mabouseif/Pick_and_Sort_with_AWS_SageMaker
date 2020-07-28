@@ -14,9 +14,9 @@
         </include>
 
         <!-- UR5 MoveIt! RVIZ-->
-        <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch">
+        <!-- <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch">
           <arg name="config" value="true"/>
-        </include>
+        </include> -->
     </group>
 
 
@@ -34,12 +34,21 @@
       blue_cylinder  -x -0.50 -y 0.6 -z 1" 
       respawn="false" output="screen" /> -->
 
+      <!-- Delay Node -->
+      <arg name="node_start_delay" default="1.5" />  
+      <node name="listener" pkg="roscpp_tutorials" type="listener" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " />
+
       <node name="red_box_node" pkg="gazebo_ros" type="spawn_model" 
       args="-urdf -file $(find pick_and_sort)/urdf/red_box.urdf -model 
       red_box  -x -0.50 -y 0.05 -z 1.3" 
       respawn="false" output="screen" />
       
     </group> 
+
+
+      <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+      <!-- <arg name="port" value="3001"/> -->
+    </include>
 
 
 

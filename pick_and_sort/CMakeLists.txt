@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   ur5_moveit_config
   ur5_moveit_config
   gazebo_msgs
+  rosbridge_server
 )
 
 ## System dependencies are found with CMake's conventions
