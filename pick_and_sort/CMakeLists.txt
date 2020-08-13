@@ -17,10 +17,14 @@ find_package(catkin REQUIRED COMPONENTS
   ur5_moveit_config
   gazebo_msgs
   rosbridge_server
+  cv_bridge
+  sensor_msgs
+  image_transport
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(OpenCV REQUIRED)
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -124,6 +128,7 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -140,8 +145,11 @@ include_directories(
 # With catkin_make all packages are built within a single CMake context
 # The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/pick_and_sort_node.cpp)
-add_executable(first_test src/first_test.cpp src/robot.h src/robot.cpp)
-target_link_libraries(first_test ${catkin_LIBRARIES})
+add_executable(first_test src/first_test.cpp src/robot.h src/robot.cpp) #  src/image_converter.cpp
+target_link_libraries(first_test ${catkin_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(image_converter src/image_converter.cpp)
+target_link_libraries(image_converter ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the

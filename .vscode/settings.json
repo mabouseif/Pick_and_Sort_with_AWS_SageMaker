@@ -59,5 +59,6 @@
         "random": "cpp",
         "set": "cpp",
         "string": "cpp"
-    }
+    },
+    "ros.distro": "kinetic"
 }

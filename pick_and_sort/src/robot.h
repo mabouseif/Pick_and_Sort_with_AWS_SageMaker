@@ -39,11 +39,13 @@ class Robot
     ros::ServiceClient set_model_state_client = robot_node.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceServer order_service = robot_node.advertiseService("/pack_order", &Robot::fulfillOrderCallback, this);
     ros::Subscriber image_subscriber = robot_node.subscribe("/rrbot/camera1/image_raw", 1, &Robot::imageCallback, this);
+    ros::Subscriber image_open_cv_subscriber = robot_node.subscribe("/image_converter/output_video", 1, &Robot::imageCallbackOpenCV, this);
     bool isStopImage = false;
 
     bool fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res);
     // void imageCallback(const sensor_msgs::Image& msg);
     void imageCallback(const sensor_msgs::ImagePtr& msg);
+    void imageCallbackOpenCV(const sensor_msgs::ImagePtr& msg);
 
   
   public:

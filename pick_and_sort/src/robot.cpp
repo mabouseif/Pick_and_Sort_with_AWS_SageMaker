@@ -347,6 +347,12 @@ void Robot::imageCallback(const sensor_msgs::ImagePtr& msg)
 }
 
 
+void Robot::imageCallbackOpenCV(const sensor_msgs::ImagePtr& msg)
+{
+    
+}
+
+
 
 // // Stolen from SO
 // void SaveImageAsPPM( const sensor_msgs::ImageConstPtr& msg, const char* filename )
