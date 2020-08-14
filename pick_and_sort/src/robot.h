@@ -37,15 +37,14 @@ class Robot
     ros::ServiceClient delete_model_client = robot_node.serviceClient<gazebo_msgs::DeleteModel>("/gazebo/delete_model");
     ros::ServiceClient get_model_state_client = robot_node.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state");
     ros::ServiceClient set_model_state_client = robot_node.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
+    ros::ServiceClient aws_client = robot_node.serviceClient<std_srvs::Empty>("/AWS_service");
     ros::ServiceServer order_service = robot_node.advertiseService("/pack_order", &Robot::fulfillOrderCallback, this);
-    ros::Subscriber image_subscriber = robot_node.subscribe("/rrbot/camera1/image_raw", 1, &Robot::imageCallback, this);
-    ros::Subscriber image_open_cv_subscriber = robot_node.subscribe("/image_converter/output_video", 1, &Robot::imageCallbackOpenCV, this);
+    ros::Subscriber image_subscriber = robot_node.subscribe("/camera/image_raw", 1, &Robot::imageCallback, this);
     bool isStopImage = false;
 
     bool fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res);
     // void imageCallback(const sensor_msgs::Image& msg);
     void imageCallback(const sensor_msgs::ImagePtr& msg);
-    void imageCallbackOpenCV(const sensor_msgs::ImagePtr& msg);
 
   
   public:
@@ -60,6 +59,7 @@ class Robot
     bool spawnObject(std::string object_name);
     bool deleteObject(std::string object_name);
     bool setModelPose(std::string model_name, geometry_msgs::Pose target_pose);
+    std::string classifyObject();
     geometry_msgs::Pose getModelPose(std::string model_name);
     
     

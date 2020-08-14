@@ -347,43 +347,27 @@ void Robot::imageCallback(const sensor_msgs::ImagePtr& msg)
 }
 
 
-void Robot::imageCallbackOpenCV(const sensor_msgs::ImagePtr& msg)
+std::string Robot::classifyObject()
 {
+    std_srvs::Empty srv;
+    std::string obj_color;
+
+    bool res = this->aws_client.call(srv);
+    std::cout << "AWS Response: " << res << std::endl;
+    this->robot_node.getParam("/classification_result", obj_color);
     
+
+    std::cout << "inference result: " << obj_color << std::endl;
+    // if (res)
+    // {
+    //     this->robot_node.getParam("/classification_result", obj_color);
+    //     this->robot_node.setParam("/classification_result", "None");
+    // }
+    // else
+    // {
+    //     ROS_ERROR("FAILED TO CLASSIFY!");
+    // }
+    this->robot_node.setParam("/classification_result", "None");
+    
+    return obj_color;
 }
-
-
-
-// // Stolen from SO
-// void SaveImageAsPPM( const sensor_msgs::ImageConstPtr& msg, const char* filename )
-// {
-//   if ( msg->encoding != "rgb8" )
-//   {
-//     return;  // Can only handle the rgb8 encoding
-//   }
-
-//   FILE* file = fopen( filename, "w" );
-
-//   fprintf( file, "P3\n" );
-//   fprintf( file, "%i %i\n", msg->width, msg->height );
-//   fprintf( file, "255\n" );
-
-//   for ( uint32_t y = 0; y < msg->height; y++ )
-//   {
-//     for ( uint32_t x = 0; x < msg->width; x++ )
-//     {
-//       // Get indices for the pixel components
-//       uint32_t redByteIdx = y*msg->step + 3*x;
-//       uint32_t greenByteIdx = redByteIdx + 1;
-//       uint32_t blueByteIdx = redByteIdx + 2;
-
-//       fprintf( file, "%i %i %i ", 
-//         msg->data[ redByteIdx ], 
-//         msg->data[ greenByteIdx ], 
-//         msg->data[ blueByteIdx ] );
-//     }
-//     fprintf( file, "\n" );
-//   }
-
-//   fclose( file );
-// }

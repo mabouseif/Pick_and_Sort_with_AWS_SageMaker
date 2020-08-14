@@ -148,7 +148,7 @@ include_directories(
 add_executable(first_test src/first_test.cpp src/robot.h src/robot.cpp) #  src/image_converter.cpp
 target_link_libraries(first_test ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
-add_executable(image_converter src/image_converter.cpp)
+add_executable(image_converter src/image_converter.cpp src/image_converter.h)
 target_link_libraries(image_converter ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 ## Rename C++ executable without prefix
