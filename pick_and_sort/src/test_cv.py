@@ -11,8 +11,8 @@ import re
 file_name = "/home/mohamed/Desktop/ooo.jpg"
 endpoint_name = 'DEMO-imageclassification-ep--2020-08-19-06-17-16'
 session = boto3.Session(
-    aws_access_key_id="AKIAIQ3XPMYKF6OOI2VQ",
-    aws_secret_access_key="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",
+    aws_access_key_id="x",
+    aws_secret_access_key="x",
     # aws_session_token=SESSION_TOKEN
 )
 runtime = session.client(service_name='sagemaker-runtime',region_name='eu-west-1')
