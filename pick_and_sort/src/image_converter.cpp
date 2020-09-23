@@ -123,14 +123,19 @@ std::string exec(const char* cmd) {
 
 bool ImageConverter::AWSCallback(std_srvs::EmptyRequest& req, std_srvs::EmptyResponse& res)
 {
-  // this->nh_.setParam("/classification_result", "None")
+  const char *labels[2] = {"red_box", "blue_box"};
   bool is_write_success = cv::imwrite("/home/mohamed/Desktop/ooo.jpg", this->cv_ptr->image);
-  // cv::Mat img = this->cv_ptr->image;
 
   // exec("python /home/mohamed/catkin_ws/src/pick_and_sort/src/test_cv.py")  
   std::string result = exec("/home/mohamed/drive/boto3/venv/bin/python /home/mohamed/catkin_ws/src/pick_and_sort/src/test_cv.py");
-  std::cout << "inference result: " << result << std::endl;
 
+  result.erase(std::remove(result.begin(), result.end(), '\n'), result.end());
+
+  ROS_INFO("INFERENCE RESULT: %s", result.c_str());
+  ROS_INFO("AWSCALLBACKSERVICE RESULT: %s", result.c_str());
+
+  
+  
   this->nh_.setParam("/classification_result", result);
 
 

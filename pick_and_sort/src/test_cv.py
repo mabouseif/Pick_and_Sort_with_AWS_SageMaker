@@ -9,10 +9,10 @@ import re
 
 # file_name = '/home/mohamed/Desktop/asd/red_1.jpg'
 file_name = "/home/mohamed/Desktop/ooo.jpg"
-endpoint_name = 'DEMO-imageclassification-ep--2020-08-14-08-50-12'
+endpoint_name = 'DEMO-imageclassification-ep--2020-08-19-06-17-16'
 session = boto3.Session(
-    aws_access_key_id="AKIAIHFCMSYFT7LQDZGQ",
-    aws_secret_access_key="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",
+    aws_access_key_id="AKIAIQ3XPMYKF6OOI2VQ",
+    aws_secret_access_key="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",
     # aws_session_token=SESSION_TOKEN
 )
 runtime = session.client(service_name='sagemaker-runtime',region_name='eu-west-1')
@@ -29,8 +29,9 @@ b = int(round(float(b[0:-1])))
 result = [a, b]
 # print(result)
 index = np.argmax(result)
-object_categories = ["red", "blue"]
+object_categories = ["red_box", "blue_box"]
 
-print(str(result[index]))
+# print(str(result[index]))
+print(str(object_categories[index]))
 
-print("Result: label - " + object_categories[index] + ", probability - " + str(result[index]))
+# print("Result: label - " + object_categories[index] + ", probability - " + str(result[index]))

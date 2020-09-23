@@ -22,10 +22,10 @@ int main(int argc, char** argv)
     robot.spawnObject((rand() % 2) ? "red_box" : "blue_box");
 
     // Go to init pose
-    robot.goToWorkspace();
+    // robot.goToWorkspace();
 
     // Classify object
-    robot.classifyObject();
+    // robot.classifyObject();
 
 
     // Press Ctrl+C to shut down

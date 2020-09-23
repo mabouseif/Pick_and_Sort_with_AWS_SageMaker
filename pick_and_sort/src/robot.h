@@ -39,12 +39,9 @@ class Robot
     ros::ServiceClient set_model_state_client = robot_node.serviceClient<gazebo_msgs::SetModelState>("/gazebo/set_model_state");
     ros::ServiceClient aws_client = robot_node.serviceClient<std_srvs::Empty>("/AWS_service");
     ros::ServiceServer order_service = robot_node.advertiseService("/pack_order", &Robot::fulfillOrderCallback, this);
-    ros::Subscriber image_subscriber = robot_node.subscribe("/camera/image_raw", 1, &Robot::imageCallback, this);
     bool isStopImage = false;
 
     bool fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res);
-    // void imageCallback(const sensor_msgs::Image& msg);
-    void imageCallback(const sensor_msgs::ImagePtr& msg);
 
   
   public:
@@ -56,6 +53,9 @@ class Robot
     bool gripperOn();
     bool gripperOff();
     bool pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose);
+    bool pickUp(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose);
+    bool discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose);
+    bool dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose);
     bool spawnObject(std::string object_name);
     bool deleteObject(std::string object_name);
     bool setModelPose(std::string model_name, geometry_msgs::Pose target_pose);

@@ -160,9 +160,40 @@ bool Robot::gripperOff()
 }
 
 
-bool Robot::pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
-{
+// bool Robot::pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+// {
 
+//     target_pose.position.z += 0.1;
+//     this->move(target_pose);
+
+//     target_pose.position.z -= 0.1;
+//     this->move(target_pose);
+
+//     this->gripperOn();
+    
+//     target_pose.position.z += 0.1;
+//     this->move(target_pose);
+
+//     drop_pose.position.z += 0.1;
+//     this->move(drop_pose);
+
+//     drop_pose.position.z -= 0.1;
+//     this->move(drop_pose);
+
+//     this->gripperOff();
+
+//     drop_pose.position.z += 0.1;
+//     this->move(drop_pose);
+
+//     bool success = this->home();
+
+//     return success;
+
+// }
+
+
+bool Robot::pickUp(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+{
     target_pose.position.z += 0.1;
     this->move(target_pose);
 
@@ -174,7 +205,74 @@ bool Robot::pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose d
     target_pose.position.z += 0.1;
     this->move(target_pose);
 
+}
+
+
+bool Robot::discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+{
+
+    drop_pose.position.y += 0.1;
+
+    drop_pose.position.y += 0.2;
+    this->move(drop_pose);
+
+    // drop_pose.position.z += 0.1;
+    // this->move(drop_pose);
+
+    drop_pose.position.z -= 0.2;
+    this->move(drop_pose);
+
+    this->gripperOff();
+
     drop_pose.position.z += 0.1;
+
+    this->deleteObject("red_box");
+    this->deleteObject("blue_box");
+    srand (time(NULL));
+    this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
+    this->move(drop_pose);
+
+    bool success = this->goToWorkspace();
+}
+
+
+// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+// {
+//     drop_pose.position.y -= 0.2;
+//     this->move(drop_pose);
+
+//     drop_pose.position.z += 0.1;
+//     this->move(drop_pose);
+
+//     drop_pose.position.z -= 0.1;
+//     this->move(drop_pose);
+
+//     this->gripperOff();
+
+//     drop_pose.position.z += 0.1;
+
+//     this->deleteObject("red_box");
+//     this->deleteObject("blue_box");
+//     srand (time(NULL));
+//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
+//     this->move(drop_pose);
+
+//     bool success = this->goToWorkspace();
+
+// }
+
+
+bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+{
+    // drop_pose.position.y -= 0.2;
+    // this->move(drop_pose);
+
+    drop_pose.position.z += 0.1;
+    this->move(drop_pose);
+
+    drop_pose.position.x += 0.8;
     this->move(drop_pose);
 
     drop_pose.position.z -= 0.1;
@@ -183,11 +281,16 @@ bool Robot::pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose d
     this->gripperOff();
 
     drop_pose.position.z += 0.1;
+
+    this->deleteObject("red_box");
+    this->deleteObject("blue_box");
+    srand (time(NULL));
+    this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
     this->move(drop_pose);
 
+    // bool success = this->goToWorkspace();
     bool success = this->home();
-
-    return success;
 
 }
 
@@ -293,6 +396,45 @@ bool Robot::setModelPose(std::string model_name, geometry_msgs::Pose target_pose
 
 
 
+// bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res)
+// {
+//     std::string order = (req.data) ? "red_box" : "blue_box";
+
+//     ROS_INFO_NAMED("SERVICE CALL INFO", "Received Request: %s", order.c_str());
+
+//     // Get model pose
+
+//     geometry_msgs::Pose target_pose = this->workspace_pose;
+
+//     // Change ee orientation to be facing down
+//     target_pose.position.z -= 0.05;
+//     target_pose.orientation.x = 0.5;
+//     target_pose.orientation.y = 0.5;
+//     target_pose.orientation.z = -0.5;
+//     target_pose.orientation.w = 0.5;
+
+//     // Create drop pose location and offset it
+//     geometry_msgs::Pose drop_pose = target_pose;
+//     drop_pose.position.y += 0.2;
+
+//     // Pick and Drop
+//     this->pickUpAndDrop(target_pose, drop_pose);
+
+//     // Delete and then respawn object
+//     this->deleteObject("red_box");
+//     this->deleteObject("blue_box");
+//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
+
+
+//     // Respose
+//     res.success = true;
+//     res.message = ("%s order fulfilled!", order);
+
+//     return true;
+// }
+
+
 bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res)
 {
     std::string order = (req.data) ? "red_box" : "blue_box";
@@ -301,21 +443,59 @@ bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBo
 
     // Get model pose
 
-    geometry_msgs::Pose target_pose = this->workspace_pose;
+    // geometry_msgs::Pose target_pose = this->workspace_pose;
 
-    // Change ee orientation to be facing down
-    target_pose.position.z -= 0.05;
-    target_pose.orientation.x = 0.5;
-    target_pose.orientation.y = 0.5;
-    target_pose.orientation.z = -0.5;
-    target_pose.orientation.w = 0.5;
+    // // Change ee orientation to be facing down
+    // target_pose.position.z -= 0.05;
+    // target_pose.orientation.x = 0.5;
+    // target_pose.orientation.y = 0.5;
+    // target_pose.orientation.z = -0.5;
+    // target_pose.orientation.w = 0.5;
 
-    // Create drop pose location and offset it
-    geometry_msgs::Pose drop_pose = target_pose;
-    drop_pose.position.y += 0.2;
+    // // Create drop pose location and offset it
+    // // geometry_msgs::Pose drop_pose = target_pose;
+    // // drop_pose.position.y += 0.2;
 
     // Pick and Drop
-    this->pickUpAndDrop(target_pose, drop_pose);
+    bool success = false;
+    std::string obj_color;
+    while (!success)
+    {
+        geometry_msgs::Pose target_pose = this->workspace_pose;
+        // // Change ee orientation to be facing down
+        target_pose.position.z -= 0.05;
+        target_pose.orientation.x = 0.5;
+        target_pose.orientation.y = 0.5;
+        target_pose.orientation.z = -0.5;
+        target_pose.orientation.w = 0.5;
+        geometry_msgs::Pose drop_pose = target_pose;
+        this->goToWorkspace();
+        ROS_INFO("JUST ARRIVED TO WORKSPACE");
+        obj_color = this->classifyObject();
+        ROS_INFO("OBJECT CLASSIFIED");
+        this->pickUp(target_pose, drop_pose);
+        ROS_INFO("PICKED OBJECT UP");
+        ROS_INFO("SUCCESFUL PICK UP!!");
+        std::cout << "obj color: " << obj_color << " and order color: " << order << std::endl;
+        if (obj_color == order)
+        {
+            ROS_INFO("ORDER AND CLASSIFICATION MATCH! BEGIN DISPATCH");
+            this->dispatchOrder(target_pose, drop_pose);
+            ROS_INFO("SUCCESFUL DISPATCH!!");
+            success = true;
+            break;
+        }
+        else
+        {
+            ROS_INFO("ORDER AND CLASSIFICATION DO NOT MATCH! OBJECT WILL BE DISCARDED");
+            this->discardOrder(target_pose, drop_pose);
+            ROS_INFO("SUCCESFUL DISCARD!!");
+        }
+            
+    }
+    
+    ROS_INFO("ORDER FULFILLED! CLEANING SCENE UP");
+    ros::Duration(2).sleep();
 
     // Delete and then respawn object
     this->deleteObject("red_box");
@@ -328,23 +508,10 @@ bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBo
     res.success = true;
     res.message = ("%s order fulfilled!", order);
 
+
     return true;
 }
 
-
-
-
-void Robot::imageCallback(const sensor_msgs::ImagePtr& msg)
-{
-    this->current_img = *msg;
-
-    // if (!this->isStopImage)
-    // {
-    //     SaveImageAsPPM(msg, "/home/mohamed/Desktop/image.ppm");
-    //     system("pnmtojpeg /home/mohamed/Desktop/image.ppm > /home/mohamed/Desktop/result.jpg");
-    // }
-        
-}
 
 
 std::string Robot::classifyObject()
@@ -356,18 +523,22 @@ std::string Robot::classifyObject()
     std::cout << "AWS Response: " << res << std::endl;
     this->robot_node.getParam("/classification_result", obj_color);
     
-
     std::cout << "inference result: " << obj_color << std::endl;
-    // if (res)
-    // {
-    //     this->robot_node.getParam("/classification_result", obj_color);
-    //     this->robot_node.setParam("/classification_result", "None");
-    // }
-    // else
-    // {
-    //     ROS_ERROR("FAILED TO CLASSIFY!");
-    // }
+
     this->robot_node.setParam("/classification_result", "None");
     
     return obj_color;
 }
+
+
+// std::string Robot::classifyObject()
+// {
+//     gazebo_msgs::GetModelState srv;
+//     srv.request.model_name = "blue_box"; 
+
+//     if (this->get_model_state_client.call(srv))
+//         return "blue_box";
+//     else
+//         return "red_box";
+    
+// }
