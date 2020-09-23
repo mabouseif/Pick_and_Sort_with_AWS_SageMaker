@@ -8,6 +8,8 @@
 
 static const std::string OPENCV_WINDOW = "Image window";
 
+
+// Class for converting from ROS images to OpenCV images
 class ImageConverter
 {
   ros::NodeHandle nh_;

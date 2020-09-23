@@ -29,6 +29,11 @@
       table  -x -0.50 -y 0.05 -z 1" 
       respawn="false" output="screen" />
 
+      <node name="bin_node" pkg="gazebo_ros" type="spawn_model" 
+      args="-urdf -file $(find pick_and_sort)/urdf/bin.urdf -model 
+      bin  -x 0 -y 0.5 -z 0.05" 
+      respawn="false" output="screen" />
+
       <!-- <node name="blue_cylinder_node" pkg="gazebo_ros" type="spawn_model" 
       args="-urdf -file $(find pick_and_sort)/urdf/blue_cylinder.urdf -model 
       blue_cylinder  -x -0.50 -y 0.6 -z 1" 
@@ -55,16 +60,6 @@
     <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
       <!-- <arg name="port" value="3001"/> -->
     </include>
-
-
-    
-
-
-
-    <!-- <include>
-      <uri>model://carboard_box</uri>
-    </include> -->
-
 
 
 

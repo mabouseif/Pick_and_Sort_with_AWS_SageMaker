@@ -19,6 +19,7 @@
 #include <string>
 
 
+// Robot class
 class Robot
 {
   private:

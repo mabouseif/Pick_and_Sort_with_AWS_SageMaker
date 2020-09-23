@@ -38,6 +38,7 @@ Robot::Robot()
     
 }
 
+// Move to pose
 bool Robot::move(geometry_msgs::Pose target_pose)
 {
     // Set pose for move group
@@ -69,24 +70,23 @@ bool Robot::move(geometry_msgs::Pose target_pose)
 }
 
 
-
+// Home robot
 bool Robot::home()
 {
     bool success = this->move(this->home_pose);
-
     return success;
 }
 
 
+// Go to workspace pose
 bool Robot::goToWorkspace()
 {
     bool success = this->move(this->workspace_pose);
-
     return success;
 }
 
 
-
+// Move to pose with constraints (Needs fixing)
 bool Robot::moveConstrained(geometry_msgs::Pose target_pose)
 {
 
@@ -141,6 +141,7 @@ bool Robot::moveConstrained(geometry_msgs::Pose target_pose)
 }
 
 
+// Open gripper
 bool Robot::gripperOn()
 {
     std_srvs::Empty srv;
@@ -150,6 +151,8 @@ bool Robot::gripperOn()
     return success;
 }
 
+
+// Close gripper
 bool Robot::gripperOff()
 {
     std_srvs::Empty srv;
@@ -160,38 +163,7 @@ bool Robot::gripperOff()
 }
 
 
-// bool Robot::pickUpAndDrop(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
-// {
-
-//     target_pose.position.z += 0.1;
-//     this->move(target_pose);
-
-//     target_pose.position.z -= 0.1;
-//     this->move(target_pose);
-
-//     this->gripperOn();
-    
-//     target_pose.position.z += 0.1;
-//     this->move(target_pose);
-
-//     drop_pose.position.z += 0.1;
-//     this->move(drop_pose);
-
-//     drop_pose.position.z -= 0.1;
-//     this->move(drop_pose);
-
-//     this->gripperOff();
-
-//     drop_pose.position.z += 0.1;
-//     this->move(drop_pose);
-
-//     bool success = this->home();
-
-//     return success;
-
-// }
-
-
+// Pick up object
 bool Robot::pickUp(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
 {
     target_pose.position.z += 0.1;
@@ -208,6 +180,7 @@ bool Robot::pickUp(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pos
 }
 
 
+// Discard object
 bool Robot::discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
 {
 
@@ -237,43 +210,19 @@ bool Robot::discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose dr
 }
 
 
-// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
-// {
-//     drop_pose.position.y -= 0.2;
-//     this->move(drop_pose);
-
-//     drop_pose.position.z += 0.1;
-//     this->move(drop_pose);
-
-//     drop_pose.position.z -= 0.1;
-//     this->move(drop_pose);
-
-//     this->gripperOff();
-
-//     drop_pose.position.z += 0.1;
-
-//     this->deleteObject("red_box");
-//     this->deleteObject("blue_box");
-//     srand (time(NULL));
-//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
-
-//     this->move(drop_pose);
-
-//     bool success = this->goToWorkspace();
-
-// }
-
-
+// Dispatch object
 bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
 {
-    // drop_pose.position.y -= 0.2;
+
+    // drop_pose.position.y = 0.1;
+    // drop_pose.position.x = -0.5;
     // this->move(drop_pose);
-
-    drop_pose.position.z += 0.1;
+    drop_pose.position.y += 0.35;
+    drop_pose.position.x += 0.5;
     this->move(drop_pose);
 
-    drop_pose.position.x += 0.8;
-    this->move(drop_pose);
+    // drop_pose.position.z += 0.1;
+    // this->move(drop_pose);
 
     drop_pose.position.z -= 0.1;
     this->move(drop_pose);
@@ -295,7 +244,42 @@ bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose d
 }
 
 
+// // Dispatch object
+// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+// {
+//     // drop_pose.position.y -= 0.2;
+//     // this->move(drop_pose);
 
+//     drop_pose.position.z += 0.1;
+//     this->move(drop_pose);
+
+//     drop_pose.position.x += 0.8;
+//     this->move(drop_pose);
+
+//     drop_pose.position.z -= 0.1;
+//     this->move(drop_pose);
+
+//     this->gripperOff();
+
+//     drop_pose.position.z += 0.1;
+
+//     this->deleteObject("red_box");
+//     this->deleteObject("blue_box");
+//     srand (time(NULL));
+//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
+//     this->move(drop_pose);
+
+//     // bool success = this->goToWorkspace();
+//     bool success = this->home();
+
+// }
+
+
+
+
+
+// Spawn random object in workspace
 bool Robot::spawnObject(std::string object_name)
 {
     std::string path;
@@ -337,7 +321,7 @@ bool Robot::spawnObject(std::string object_name)
 }
 
 
-
+// Delete object from scene
 bool Robot::deleteObject(std::string object_name)
 {
     gazebo_msgs::DeleteModel delete_model_srv;
@@ -352,7 +336,7 @@ bool Robot::deleteObject(std::string object_name)
 }
 
 
-
+// Get object pose
 geometry_msgs::Pose Robot::getModelPose(std::string model_name)
 {
     geometry_msgs::Pose target_pose;
@@ -377,6 +361,8 @@ geometry_msgs::Pose Robot::getModelPose(std::string model_name)
 
 }
 
+
+// Set object pose
 bool Robot::setModelPose(std::string model_name, geometry_msgs::Pose target_pose)
 {
     gazebo_msgs::SetModelState set_model_state_srv;
@@ -394,47 +380,7 @@ bool Robot::setModelPose(std::string model_name, geometry_msgs::Pose target_pose
 
 
 
-
-
-// bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res)
-// {
-//     std::string order = (req.data) ? "red_box" : "blue_box";
-
-//     ROS_INFO_NAMED("SERVICE CALL INFO", "Received Request: %s", order.c_str());
-
-//     // Get model pose
-
-//     geometry_msgs::Pose target_pose = this->workspace_pose;
-
-//     // Change ee orientation to be facing down
-//     target_pose.position.z -= 0.05;
-//     target_pose.orientation.x = 0.5;
-//     target_pose.orientation.y = 0.5;
-//     target_pose.orientation.z = -0.5;
-//     target_pose.orientation.w = 0.5;
-
-//     // Create drop pose location and offset it
-//     geometry_msgs::Pose drop_pose = target_pose;
-//     drop_pose.position.y += 0.2;
-
-//     // Pick and Drop
-//     this->pickUpAndDrop(target_pose, drop_pose);
-
-//     // Delete and then respawn object
-//     this->deleteObject("red_box");
-//     this->deleteObject("blue_box");
-//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
-
-
-
-//     // Respose
-//     res.success = true;
-//     res.message = ("%s order fulfilled!", order);
-
-//     return true;
-// }
-
-
+// Order service request callback
 bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBoolResponse &res)
 {
     std::string order = (req.data) ? "red_box" : "blue_box";
@@ -514,6 +460,7 @@ bool Robot::fulfillOrderCallback(std_srvs::SetBoolRequest  &req, std_srvs::SetBo
 
 
 
+// Classify using AWS Sagemaker (Cloud inference)
 std::string Robot::classifyObject()
 {
     std_srvs::Empty srv;
@@ -531,6 +478,7 @@ std::string Robot::classifyObject()
 }
 
 
+// Local inference for test purposes
 // std::string Robot::classifyObject()
 // {
 //     gazebo_msgs::GetModelState srv;
