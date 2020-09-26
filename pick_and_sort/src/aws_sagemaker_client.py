@@ -29,10 +29,10 @@ import re
 
 # file_name = '/home/mohamed/Desktop/asd/red_1.jpg'
 file_name = "/home/mohamed/Desktop/object_image.jpg"
-endpoint_name ='endpoint-new'
+endpoint_name ='endpoint-1'
 session = boto3.Session(
-    aws_access_key_id="xx",
-    aws_secret_access_key="xx",
+    aws_access_key_id="X",
+    aws_secret_access_key="X",
     # aws_session_token=SESSION_TOKEN
 )
 runtime = session.client(service_name='sagemaker-runtime',region_name='eu-west-1')

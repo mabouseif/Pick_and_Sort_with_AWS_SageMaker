@@ -210,16 +210,64 @@ bool Robot::discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose dr
 }
 
 
+// // Dispatch object
+// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
+// {
+
+//     // drop_pose.position.y = 0.1;
+//     // drop_pose.position.x = -0.5;
+//     // this->move(drop_pose);
+//     drop_pose.position.y += 0.35;
+//     drop_pose.position.x += 0.5;
+//     this->move(drop_pose);
+
+//     // drop_pose.position.z += 0.1;
+//     // this->move(drop_pose);
+
+//     drop_pose.position.z -= 0.1;
+//     this->move(drop_pose);
+
+//     this->gripperOff();
+
+//     drop_pose.position.z += 0.1;
+
+//     this->deleteObject("red_box");
+//     this->deleteObject("blue_box");
+//     srand (time(NULL));
+//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
+
+//     this->move(drop_pose);
+
+//     // bool success = this->goToWorkspace();
+//     bool success = this->home();
+
+// }
+
+
 // Dispatch object
 bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
 {
 
-    // drop_pose.position.y = 0.1;
-    // drop_pose.position.x = -0.5;
-    // this->move(drop_pose);
-    drop_pose.position.y += 0.35;
+
+    moveit_msgs::OrientationConstraint ocm;
+    moveit_msgs::Constraints constraints;
+    ocm.link_name = "ee_link";
+    ocm.header.frame_id = "base_link";
+    ocm.weight = 1.0;
+    ocm.orientation = this->move_group.getCurrentPose().pose.orientation;
+    ocm.absolute_x_axis_tolerance = 0.1;
+    ocm.absolute_y_axis_tolerance = 0.1;
+    ocm.absolute_z_axis_tolerance = 2.0 * 3.14;
+
+    
+    constraints.orientation_constraints.push_back(ocm);
+    this->move_group.setPathConstraints(constraints);
+
+    drop_pose.position.y += 0.4; // 0.35;
     drop_pose.position.x += 0.5;
     this->move(drop_pose);
+
+    this->move_group.clearPathConstraints();
 
     // drop_pose.position.z += 0.1;
     // this->move(drop_pose);
@@ -242,38 +290,6 @@ bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose d
     bool success = this->home();
 
 }
-
-
-// // Dispatch object
-// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
-// {
-//     // drop_pose.position.y -= 0.2;
-//     // this->move(drop_pose);
-
-//     drop_pose.position.z += 0.1;
-//     this->move(drop_pose);
-
-//     drop_pose.position.x += 0.8;
-//     this->move(drop_pose);
-
-//     drop_pose.position.z -= 0.1;
-//     this->move(drop_pose);
-
-//     this->gripperOff();
-
-//     drop_pose.position.z += 0.1;
-
-//     this->deleteObject("red_box");
-//     this->deleteObject("blue_box");
-//     srand (time(NULL));
-//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
-
-//     this->move(drop_pose);
-
-//     // bool success = this->goToWorkspace();
-//     bool success = this->home();
-
-// }
 
 
 
