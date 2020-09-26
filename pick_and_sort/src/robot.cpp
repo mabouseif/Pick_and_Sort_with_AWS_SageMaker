@@ -210,39 +210,6 @@ bool Robot::discardOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose dr
 }
 
 
-// // Dispatch object
-// bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)
-// {
-
-//     // drop_pose.position.y = 0.1;
-//     // drop_pose.position.x = -0.5;
-//     // this->move(drop_pose);
-//     drop_pose.position.y += 0.35;
-//     drop_pose.position.x += 0.5;
-//     this->move(drop_pose);
-
-//     // drop_pose.position.z += 0.1;
-//     // this->move(drop_pose);
-
-//     drop_pose.position.z -= 0.1;
-//     this->move(drop_pose);
-
-//     this->gripperOff();
-
-//     drop_pose.position.z += 0.1;
-
-//     this->deleteObject("red_box");
-//     this->deleteObject("blue_box");
-//     srand (time(NULL));
-//     this->spawnObject((rand() % 2) ? "red_box" : "blue_box");
-
-//     this->move(drop_pose);
-
-//     // bool success = this->goToWorkspace();
-//     bool success = this->home();
-
-// }
-
 
 // Dispatch object
 bool Robot::dispatchOrder(geometry_msgs::Pose target_pose, geometry_msgs::Pose drop_pose)

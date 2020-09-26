@@ -27,7 +27,6 @@ import json
 import numpy as np
 import re
 
-# file_name = '/home/mohamed/Desktop/asd/red_1.jpg'
 file_name = "/home/mohamed/Desktop/object_image.jpg"
 endpoint_name ='endpoint-1'
 session = boto3.Session(

@@ -2,7 +2,8 @@
 
 
 
-std::string exec(const char* cmd) {
+std::string exec(const char* cmd) 
+{
     std::array<char, 128> buffer;
     std::string result;
 
@@ -25,32 +26,34 @@ std::string exec(const char* cmd) {
     return result;
 }
 
-  ImageConverter::ImageConverter()
-    : it_(nh_)
+
+
+ImageConverter::ImageConverter()
+  : it_(nh_)
+{
+
+  this->nh_.setParam("/classification_result", "None");
+
+  // Subscribe to input video feed and publish output video feed
+  image_sub_ = it_.subscribe("/camera/image_raw", 1,
+    &ImageConverter::imageCb, this);
+}
+
+void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
+{
+  
+  try
   {
-
-    this->nh_.setParam("/classification_result", "None");
-
-    // Subscribe to input video feed and publish output video feed
-    image_sub_ = it_.subscribe("/camera/image_raw", 1,
-      &ImageConverter::imageCb, this);
+    this->cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+  }
+  catch (cv_bridge::Exception& e)
+  {
+    ROS_ERROR("cv_bridge exception: %s", e.what());
+    return;
   }
 
-  void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
-  {
-    
-    try
-    {
-      this->cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-    }
-    catch (cv_bridge::Exception& e)
-    {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      return;
-    }
+}
 
-
-  }
 
 
 bool ImageConverter::AWSCallback(std_srvs::EmptyRequest& req, std_srvs::EmptyResponse& res)
@@ -66,8 +69,6 @@ bool ImageConverter::AWSCallback(std_srvs::EmptyRequest& req, std_srvs::EmptyRes
   ROS_INFO("INFERENCE RESULT: %s", result.c_str());
   ROS_INFO("AWSCALLBACKSERVICE RESULT: %s", result.c_str());
 
-  
-  
   this->nh_.setParam("/classification_result", result);
 
 
@@ -81,5 +82,6 @@ int main(int argc, char** argv)
   ros::init(argc, argv, "image_converter");
   ImageConverter ic;
   ros::spin();
+
   return 0;
 }
