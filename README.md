@@ -15,20 +15,20 @@ The project uses [ROS Kinetic](http://wiki.ros.org/kinetic) running on [Ubuntu 1
 
 The following tools are used for **simulation**, motion planning:
 
-* [Gazebo](http://gazebosim.org/): a physics based 3D simulator extensively used in the robotics world
-* [MoveIt!](http://moveit.ros.org/): a ROS based software framework for motion planning, kinematics and robot control
+* [**Gazebo**](http://gazebosim.org/): a physics based 3D simulator extensively used in the robotics world
+* [**MoveIt!**](http://moveit.ros.org/): a ROS based software framework for motion planning, kinematics and robot control
 
 
 The following tools are used for training, evaluation, and deployment of deep learning-based image **classification** model on the **cloud**:
 
-* [AWS SageMaker](https://aws.amazon.com/sagemaker/): a cloud machine-learning platform that enables developers to create, train, and deploy machine-learning models in the cloud. 
+* [**AWS SageMaker**](https://aws.amazon.com/sagemaker/): a cloud machine-learning platform that enables developers to create, train, and deploy machine-learning models in the cloud. 
 
 The following tools are used for development of the **web interface**:
-* [Flask](https://flask.palletsprojects.com/en/1.1.x/): a lightweight Web Server Gate Interface web application framework
-* [Bootstrap](https://getbootstrap.com/): an open-source front-end framework used to create modern websites and web apps using HTML and CSS templates for UI interface
+* [**Flask**](https://flask.palletsprojects.com/en/1.1.x/): a lightweight Web Server Gate Interface web application framework
+* [**Bootstrap**](https://getbootstrap.com/): an open-source front-end framework used to create modern websites and web apps using HTML and CSS templates for UI interface
 
 
-### 3. Installation and Usage
+### 3. Installation and How to Use
 
 1. Install ROS Kinetic, Gazebo, OpenCV
 2. Clone and build the project as follows:
@@ -80,4 +80,21 @@ catkin_make && devel && rosrun pick_and_sort main
 7. Replace the AWS Credentials and endpoint name in `aws_sage_maker_client.py` after deploying the endpoint with the proper configuration and respective model.
 8. Use the web interface to place the requests.
 
+
+### 4. Files
+
+- [**robot.h**](./pick_and_sort/src/robot.h) and [**robot.cpp**](./pick_and_sort/src/robot.cpp):  
+Robot class for robot motion control and handling requests.  
+
+- [**image_converter.h**](./pick_and_sort/src/image_converter.h) and [**image_converter.cpp**](./pick_and_sort/src/image_converter.cpp):  
+Image converter class for converting from ROS image format to OpenCV format.  
+
+- [**aws_sagemaker_client.py**](./pick_and_sort/src/aws_sagemaker_client.py):  
+AWS SageMaker Python client script for invoking the deployed endpoint with the request and decoding the response back to ROS  
+
+- [**augment.py**](./pick_and_sort/src/augment.py):  
+Helper Python script for image augmentations using some affine transformations.  
+
+- [**ros_interface.py**](./ros_web/ros_website/ros_interface.py):  
+Python script for launching the web interface.  
 
