@@ -98,3 +98,11 @@ Helper Python script for image augmentations using some affine transformations.
 - [**ros_interface.py**](./ros_web/ros_website/ros_interface.py):  
 Python script for launching the web interface.  
 
+
+### 5. TODO
+
+1. Improve constrained path-planning
+2. Increase object complexity and variability
+3. Dynamic environment
+4. Visual servoing
+
