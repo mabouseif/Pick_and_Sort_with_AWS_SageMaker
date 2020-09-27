@@ -1,6 +1,6 @@
 ## Product "Pick and Sort" with real-time cloud-based object classification using AWS SageMaker . 
 <p align="center">
-<img src="./media/gif_1.gif" width="600">
+<img src="./media/gif_1.gif" width="800">
 
 ### 1. Introduction
 This project is a simulation for a (simple) sorting scenario using a UR5 robot with an eye-in-hand setup. It consists of three main components: A web interface for placing order requests, a deployed endpoint through AWS SageMaker for real-time cloud-based inference of images of the product, and a simulation environment using ROS and Gazebo. The following are the steps starting from request till dispatch:
